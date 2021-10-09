@@ -1,8 +1,17 @@
-import { AppProps } from 'next/dist/shared/lib/router/router';
-import '../styles/globals.css';
+import "../styles/globals.css";
+import { AppProps } from "next/app";
+import { ChakraProvider } from "@chakra-ui/react";
+import Layout from "../components/Layout";
+import theme from "../styles/theme";
 
 function MyApp({ Component, pageProps }: AppProps) {
-    return <Component {...pageProps} />;
+	return (
+		<ChakraProvider theme={theme}>
+			<Layout>
+				<Component {...pageProps} />
+			</Layout>
+		</ChakraProvider>
+	);
 }
 
 export default MyApp;
