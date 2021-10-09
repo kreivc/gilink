@@ -1,12 +1,15 @@
 import React from "react";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 
 export default function Navbar() {
 	return (
-		<Box>
-			<Text fontWeight={"bold"} fontSize={"3xl"} textAlign={"center"}>
-				Navbar
-			</Text>
+		<Box px="5">
+			<Flex justifyContent={"space-between"} alignItems={"center"} p="2">
+				<Text fontSize={"2xl"}>gilink</Text>
+				<Text fontWeight={"semibold"} fontSize={"2xl"} textAlign={"center"}>
+					Navbar
+				</Text>
+			</Flex>
 		</Box>
 	);
 }

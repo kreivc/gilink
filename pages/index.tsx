@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Box, Button, Checkbox, Input, VStack } from "@chakra-ui/react";
+import { Button, Checkbox, Input, VStack } from "@chakra-ui/react";
 
 export default function Home() {
 	return (
