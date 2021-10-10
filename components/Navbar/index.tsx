@@ -31,9 +31,7 @@ export default function Navbar() {
 	return (
 		<Flex {...parentContainerProps}>
 			<Text {...logoTextProps}>gilink</Text>
-			<Text>
-				<Session />
-			</Text>
+			<Session />
 		</Flex>
 	);
 }
