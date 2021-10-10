@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Flex, Text } from '@chakra-ui/react';
-import { logoTextProps, parentContainerProps } from './NavbarProps';
+import { logoTextProps, parentContainerProps } from './style-props';
 
 export default function Navbar() {
     return (
