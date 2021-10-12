@@ -1,46 +1,86 @@
-import { Box, Button, Input } from '@chakra-ui/react';
-import { useEffect } from 'react';
-import Router from 'next/router';
-import { providers, getSession, ClientSafeProvider } from 'next-auth/client';
-import { signIn } from 'next-auth/client';
-import { NextPageContext } from 'next';
-import { Session } from 'next-auth';
+import { Box, Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import Router from "next/router";
+import { getSession, csrfToken } from "next-auth/client";
+import { signIn } from "next-auth/client";
+import { GetServerSidePropsContext } from "next";
+import { Session } from "next-auth";
 
 export interface LoginProps {
-    providers: Record<string, ClientSafeProvider>;
-    session: Session;
+	session: Session;
+	csrfToken: string;
 }
 
-function Login({ providers, session }: LoginProps) {
-    useEffect(() => {
-        if (session) {
-            Router.push('/');
-        }
-    }, [session]);
+function Login({ session, csrfToken }: LoginProps) {
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
 
-    if (session) return null;
+	// console.log(session, csrfToken);
 
-    return (
-        <Box p="20">
-            <Input placeholder="email" type="email" />
-            <Input placeholder="password" type="password" />
-            <Box>
-                <Button
-                    style={{ background: 'brand', color: 'brand.50' }}
-                    onClick={() => signIn(providers.id)}
-                >
-                    Sign in with {providers.name}
-                </Button>
-            </Box>
-        </Box>
-    );
+	useEffect(() => {
+		if (session) {
+			Router.push("/");
+		}
+	}, [session]);
+
+	const handleSubmit = async (e: React.FormEvent<EventTarget>) => {
+		e.preventDefault();
+		const res = await signIn("credentials", {
+			redirect: false,
+			email,
+			password,
+		});
+
+		if (res.error) {
+			if (res.error === "Success! Check your email.") {
+				signIn("email", { email: email });
+				console.log("success");
+			}
+			console.log("err");
+		}
+
+		Router.push("/");
+	};
+
+	return (
+		<Box maxWidth="container.xl">
+			<Box p="5">
+				<Box as="form" maxWidth="container.sm" onSubmit={handleSubmit}>
+					<Input type="hidden" name="csrfToken" defaultValue={csrfToken} />
+
+					<FormControl id="email">
+						<FormLabel>Email address</FormLabel>
+						<Input
+							type="email"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+						/>
+					</FormControl>
+					<FormControl id="password">
+						<FormLabel>Password</FormLabel>
+						<Input
+							type="password"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+						/>
+					</FormControl>
+
+					<Button type="submit" colorScheme="brand">
+						Sign in with
+					</Button>
+				</Box>
+			</Box>
+		</Box>
+	);
 }
 
-Login.getInitialProps = async (context: NextPageContext) => {
-    return {
-        providers: await providers(),
-        session: await getSession(context),
-    };
-};
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+	return {
+		props: {
+			session: await getSession(context),
+			csrfToken: await csrfToken(context),
+		},
+	};
+}
 
 export default Login;

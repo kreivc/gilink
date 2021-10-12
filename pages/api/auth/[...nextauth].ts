@@ -9,14 +9,15 @@ export default NextAuth({
 		Providers.Credentials({
 			name: "Credentials",
 			credentials: {
-				username: { label: "Username", type: "text" },
+				email: { label: "email", type: "text" },
 				password: { label: "Password", type: "password" },
 			},
 			async authorize(credentials, req) {
 				const user: User = {
-					name: credentials.username,
+					email: credentials.email,
 				};
 				if (user) {
+					console.log(user);
 					return user;
 				}
 
