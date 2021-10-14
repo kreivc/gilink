@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 
 export default async function handle(
     req: NextApiRequest,
-    res: NextApiResponse
+    res: NextApiResponse,
 ) {
     const { name, email, password } = req.body;
 
